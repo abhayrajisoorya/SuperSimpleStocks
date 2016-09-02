@@ -1,0 +1,42 @@
+Notes and Assumptions
+
+For Ratios.py
+
+a) Data format is assumed to be variable.
+•	The exercise documents a data format from the GBCE, but I have resorted to not using this structure. My thinking was that the data structure might change, so one can ensure greater code reliability by sourcing through a provider/API where the structure is standardised. I went with Yahoo Finance in the end, but one could use Google Finance, FactSet, QuantQuote etc.
+
+•	If a standardised data format does exist, it would be better to change the code as such using simple implementations with pandas and numpy libraries.
+
+b) I use yesterday’s high as an approximation to the current price.
+•	It is unlikely that the stock deviates significantly from its price yesterday, unless there has been a stock split, a severe market disruption or unforeseen events. All these cases hare extremely rare, and therefore, one can argue that this is a reasonable assumption to make. 
+
+•	If more granularity is indeed required, then one can source minute bar data from a specific port (google finance or other data providers might be more appropriate for this). In any case, the sourcing is done similarly.
+
+NB - one could think of using close prices too; however, given that opening auctions can drive prices relatively from the last close, I thought the high was a better fit.
+
+c) Ratios are computed using formulas for common stock
+•	For preferred stock, the yield ratio changes to incorporate the par value. But I could not find a reliable provider for the added information necessary, and have therefore not included this in my solution.
+
+d) PE formula is computed on a historical average basis
+•	The PE formula documented is Ticker Price/Dividend, where dividend acts as an approximation for EPS. My approach here is to take dividend information (sourced through Yahoo Finance) and find an ‘average dividend’ across the last four payouts and use this as a denomination. The calculated quantity would then represent a price multiple over the average dividend payout.
+
+•	A better approach would be to make the computation more ‘real time’. One could either (a) get the current EPS by using an appropriate web parser (BeautifulSoup etc.) on Google/Yahoo finance or (b) get the dividend per share as a fixed percentage of the current share price. I thought the first approach was beyond the scope of this exercise, and implemented an approximate version of the second approach.
+
+
+For Trader.py:
+
+a) The path variable
+•	The code works through first entering trades into a csv file at a specific path (which has to be changed depending on the machine).
+
+b) Trades assumed to be recorded in real time
+•	Trades are assumed to be placed in real time, which makes the time stamp equal to the current time. The code would need only minor modifications to work with trades placed historically (in this case, the user would enter a timestamp manually to be stored).
+
+c) Symbol specific VWAP is what is assumed as required
+•	The VWAP is calculated on the stock that the user mentions when calling the function, rather than on every stock existing among recorded trades.
+
+For IndexCalculator.py
+
+a) Assumed that a universe of stock tickers is given.
+•	The question is unclear as to whether the index is to be calculated for stocks within a particular universe (NYSE, NASDAQ) or just all US stocks. To make the code as generic as possible, I have a variable that provides a list of stocks as input, and the function takes data for these stocks from google finance. This list can be modified as required - if all NYSE stocks need to be addressed for example, all one would have to do is get a list of NYSE tickers from the internet and structure them to this list.
+
+
